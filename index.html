@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EV Parking Slot Detection</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,20 +22,17 @@
         }
         header {
             background: #006400;
-            padding: 10px 5%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            padding: 10px 0;
         }
         h1 {
             margin: 10px 0;
-            font-size: 20px;
+            font-size: 24px;
         }
         nav {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            width: 100%;
+            padding: 10px;
         }
         .home-button {
             background: #228B22;
@@ -44,84 +40,77 @@
             padding: 10px;
             text-decoration: none;
             border-radius: 5px;
-            display: block;
-            margin: 5px 0;
-            width: 80%;
-            text-align: center;
-        }
-        input {
-            padding: 8px;
-            margin: 5px 0;
-            width: 80%;
-            border-radius: 5px;
-            border: none;
-            text-align: center;
         }
         .slots-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
             margin-top: 20px;
-            padding: 0 5%;
+            padding: 0 10px; /* Added padding for responsiveness */
         }
         .slot {
             border: 1px solid #ccc;
-            padding: 10px;
-            width: 90%;
+            padding: 15px;
+            width: 90%; /* Adjusted width for responsiveness */
+            max-width: 250px; /* Added max-width to prevent excessive width on larger screens */
             text-align: center;
             background-color: #f9f9f9;
             color: black;
             border-radius: 10px;
             box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+            box-sizing: border-box; /* Added box-sizing for consistent width */
         }
         .slot button {
             margin-top: 10px;
-            padding: 8px 12px;
+            padding: 5px 10px;
             background-color: #28a745;
             color: white;
             border: none;
             cursor: pointer;
             border-radius: 5px;
             transition: background 0.3s;
-            width: 100%;
         }
         .slot button:hover {
             background-color: #218838;
         }
         #location-selector {
-            margin: 20px 0;
+            margin-bottom: 20px;
         }
         select {
-            padding: 8px;
+            padding: 5px;
             font-size: 16px;
             border-radius: 5px;
             border: none;
-            width: 90%;
         }
+
+        /* Media queries for responsiveness */
         @media (min-width: 600px) {
-            header {
-                flex-direction: row;
-                justify-content: space-between;
-            }
-            nav {
-                flex-direction: row;
-                justify-content: space-between;
-            }
-            .home-button, input {
-                width: auto;
-            }
             .slot {
-                width: 45%;
+                width: 45%; /* Two slots per row on medium screens */
             }
+        }
+
+        @media (min-width: 900px) {
+            .slot {
+                width: 30%; /* Three slots per row on larger screens */
+            }
+        }
+        @media (max-width: 480px) {
+          .logo{
+            height: 80px;
+            width: 80px;
+          }
+          h1{
+            font-size: 20px;
+          }
         }
     </style>
 </head>
 <body>
     <header>
         <img src="logo.jpg" alt="EV Parking Logo" class="logo">
-        <h1>Smart Self-charging & Parking system for EVs 
-        </h1>
+        <h1>EV Charging Slot Detection</h1>
         <nav>
             <a href="#" class="home-button">Home</a>
             <span>User ID: <input type="text" id="user-id" placeholder="Enter User ID"></span>
@@ -175,6 +164,7 @@
                     parkingContainer.innerHTML = "<p>No slots available for the selected location.</p>";
                     return;
                 }
+
                 slots[location].forEach(slot => {
                     const slotDiv = document.createElement("div");
                     slotDiv.classList.add("slot");
@@ -196,6 +186,22 @@
 
             renderSlots(locationSelector.value);
         });
+
+        function openBookingForm(slotId, price) {
+            const vehicleNumber = prompt("Enter your vehicle number:");
+            if (vehicleNumber) {
+                const hours = prompt("Enter hours for charging:");
+                if (hours && !isNaN(hours) && hours > 0) {
+                    const totalAmount = price * hours;
+                    alert(`Slot ${slotId} booked successfully!\nVehicle: ${vehicleNumber}\nTotal Amount: ₹${totalAmount.toFixed(2)}`);
+                    location.reload();
+                } else {
+                    alert("Invalid hours entered.");
+                }
+            } else {
+                alert("Vehicle number is required.");
+            }
+        }
     </script>
 </body>
 </html>
